@@ -1,26 +1,20 @@
 export default defineBackground(() => {
   console.log('Background started', { id: browser.runtime.id })
-  browser.runtime.onMessage.addListener(async (message) => {
+  browser.runtime.onMessage.addListener(async (message, sender) => {
     try {
-      if (message.action === 'setBadgeText') {
-        browser.action.setBadgeText({ text: formatReadingTime(message.text) })
+      switch (message.action) {
+        case 'onTotalTimeChange':
+          // Update the badge text with the total reading time.
+          browser.action.setBadgeText({
+            tabId: sender.tab?.id,
+            text: formatReadingTime(message.text),
+          })
+          break
+        default:
+          break
       }
     } catch (error) {
       console.error('Error in background message listener:', error)
-    }
-  })
-
-  // Listen for tab active changed to update the badge text
-  browser.tabs.onActivated.addListener(async (activeInfo) => {
-    try {
-      const res = await browser.scripting.executeScript<unknown[], string>({
-        target: { tabId: activeInfo.tabId },
-        files: ['content-scripts/activeTab.js'],
-      })
-      const formattedReadingTime = res[0]?.result
-      browser.action.setBadgeText({ text: formattedReadingTime })
-    } catch (error) {
-      console.error('Error in background on tab active listener', error)
     }
   })
 })

@@ -1,9 +1,10 @@
+import { ReadingTimeData } from '@/utils'
 import React from 'react'
 
 type FabButtonProps = {
   onClick?: () => void
   size?: number
-  readingTime: number
+  readingTime: ReadingTimeData
 }
 
 const FabButton: React.FC<FabButtonProps> = ({ onClick, size = 56, readingTime }) => (
