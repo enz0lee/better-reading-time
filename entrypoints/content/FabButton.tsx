@@ -3,11 +3,12 @@ import React from 'react'
 type FabButtonProps = {
   onClick?: () => void
   size?: number
-  readingTime?: string | number
+  readingTime: number
 }
 
 const FabButton: React.FC<FabButtonProps> = ({ onClick, size = 56, readingTime }) => (
   <button
+    id="readinger-fab-button"
     onClick={onClick}
     style={{
       width: size,
@@ -26,7 +27,7 @@ const FabButton: React.FC<FabButtonProps> = ({ onClick, size = 56, readingTime }
       fontWeight: 500,
     }}
   >
-    {readingTime}
+    {formatReadingTime(readingTime)}
   </button>
 )
 

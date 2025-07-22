@@ -4,11 +4,10 @@ import FabButton from './FabButton'
 export default defineContentScript({
   matches: ['*://*/*'],
   main() {
-    console.log('Hello content.')
+    console.log('Content script started', { id: browser.runtime.id })
 
     const readingTime = calculateReadingTime(document.body)
     addFabButton(readingTime)
-    console.log('READING TIME outer', readingTime)
     browser.runtime.sendMessage({
       action: 'setBadgeText',
       text: readingTime.toString(),
@@ -21,7 +20,6 @@ export default defineContentScript({
           if (node instanceof Element && node.tagName === 'ARTICLE') {
             const readingTime = calculateReadingTime(document.body)
 
-            console.log('READING TIME inner', readingTime)
             // Send a message to the content script to update the badge text.
             browser.runtime.sendMessage({
               action: 'setBadgeText',
@@ -36,26 +34,7 @@ export default defineContentScript({
   },
 })
 
-const AVERAGE_READING_SPEED_PER_MINUTE = 200
-
-function calculateReadingTime(article: HTMLElement | null): number {
-  // If we weren't provided an article, we don't need to render anything.
-  if (!article) {
-    return 0
-  }
-
-  const text = article.innerText
-  if (!text) {
-    return 0
-  }
-
-  const words = text.split(' ')
-  const wordCount = [...words].length
-  const readingTime = Math.round(wordCount / AVERAGE_READING_SPEED_PER_MINUTE)
-  return readingTime
-}
-
-function addFabButton(readingTime: string | number) {
+function addFabButton(readingTime: number) {
   // Create the floating button
   const floatingBtn = document.createElement('div')
   floatingBtn.style.position = 'fixed'
