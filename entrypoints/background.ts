@@ -1,13 +1,13 @@
 export default defineBackground(() => {
   console.log('Background started', { id: browser.runtime.id })
-  browser.runtime.onMessage.addListener(async (message, sender) => {
+  browser.runtime.onMessage.addListener(async (message: RuntimeMessage, sender, sendResponse) => {
     try {
       switch (message.action) {
-        case 'onTotalTimeChange':
+        case RuntimeEvent.ON_READING_TIME_CHANGE:
           // Update the badge text with the total reading time.
           browser.action.setBadgeText({
             tabId: sender.tab?.id,
-            text: formatReadingTime(message.text),
+            text: formatReadingTime(message.data?.totalTime),
           })
           break
         default:

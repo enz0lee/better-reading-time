@@ -4,6 +4,15 @@ export interface ReadingTimeData {
   remainingTime: number
 }
 
+export enum RuntimeEvent {
+  ON_READING_TIME_CHANGE = 'onReadingTimeChange',
+}
+
+export interface RuntimeMessage {
+  action: RuntimeEvent
+  data: ReadingTimeData | undefined
+}
+
 /**
  * Calculate the reading time of an article.
  * @param article
@@ -26,7 +35,10 @@ export function calculateReadingTime(article: HTMLElement | null): ReadingTimeDa
   return { totalTime, remainingTime: totalTime }
 }
 
-export function formatReadingTime(readingTime: number | string): string {
+export function formatReadingTime(readingTime?: number | string): string {
+  if (readingTime === undefined) {
+    throw new Error('Reading time is undefined')
+  }
   if (typeof readingTime === 'string') {
     readingTime = parseInt(readingTime, 10)
   }

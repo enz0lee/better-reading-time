@@ -28,7 +28,7 @@ const FabButton: React.FC<FabButtonProps> = ({ onClick, size = 56, readingTime }
       fontWeight: 500,
     }}
   >
-    {formatReadingTime(readingTime)}
+    {formatReadingTime(readingTime.totalTime)}
   </button>
 )
 

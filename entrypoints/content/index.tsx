@@ -1,6 +1,5 @@
 import { ReadingTimeData } from '@/utils'
 import { createRoot } from 'react-dom/client'
-import FabButton from './FabButton'
 
 export default defineContentScript({
   matches: ['*://*/*'],
@@ -11,13 +10,11 @@ export default defineContentScript({
       const readingTime = calculateReadingTime(document.body)
       addFabButton(readingTime)
 
-      if (readingTime) {
-        // Send a message to the background script to update the badge text.
-        browser.runtime.sendMessage({
-          action: 'onTotalTimeChange',
-          text: readingTime.totalTime.toString(),
-        })
-      }
+      // Send a message to the background script to update the badge text.
+      browser.runtime.sendMessage({
+        action: RuntimeEvent.ON_READING_TIME_CHANGE,
+        data: readingTime,
+      })
 
       const observer = new MutationObserver((mutations) => {
         for (const mutation of mutations) {
@@ -25,14 +22,10 @@ export default defineContentScript({
           for (const node of mutation.addedNodes) {
             if (node instanceof Element && node.tagName === 'ARTICLE') {
               const readingTime = calculateReadingTime(document.body)
-
-              if (readingTime) {
-                // Send a message to the background script to update the badge text.
-                browser.runtime.sendMessage({
-                  action: 'onTotalTimeChange',
-                  text: readingTime.totalTime.toString(),
-                })
-              }
+              browser.runtime.sendMessage({
+                action: RuntimeEvent.ON_READING_TIME_CHANGE,
+                data: readingTime,
+              })
             }
           }
         }
