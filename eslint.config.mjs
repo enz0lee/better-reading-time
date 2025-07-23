@@ -44,6 +44,7 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react/react-in-jsx-scope': 'off',
       'jsx-a11y/alt-text': 'error',
+      'react/jsx-no-undef': 'off',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
