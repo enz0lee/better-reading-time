@@ -7,7 +7,7 @@ export default defineContentScript({
     try {
       console.log('Content script started', { id: browser.runtime.id })
 
-      const readingTime = calculateReadingTime(document.body)
+      const readingTime = calculateReadingTime()
       addFabButton(readingTime)
 
       // Send a message to the background script to update the badge text.
@@ -21,7 +21,7 @@ export default defineContentScript({
           // If a new article was added.
           for (const node of mutation.addedNodes) {
             if (node instanceof Element && node.tagName === 'ARTICLE') {
-              const readingTime = calculateReadingTime(document.body)
+              const readingTime = calculateReadingTime()
               browser.runtime.sendMessage({
                 action: RuntimeEvent.ON_READING_TIME_CHANGE,
                 data: readingTime,
@@ -32,6 +32,28 @@ export default defineContentScript({
       })
 
       observer.observe(document.body, { childList: true })
+
+      window.addEventListener('load', () => {
+        browser.runtime.sendMessage({
+          action: RuntimeEvent.ON_READING_TIME_CHANGE,
+          data: calculateReadingTime(),
+        })
+      })
+
+      // Debounced scroll handler
+      const handleScroll = debounce(() => {
+        const updatedData = calculateReadingTime()
+        browser.runtime.sendMessage({
+          action: RuntimeEvent.ON_READING_TIME_CHANGE,
+          data: calculateReadingTime(),
+        })
+        const fabBtn = document.querySelector('#readinger-fab-button') as HTMLButtonElement
+        if (fabBtn) {
+          fabBtn.textContent = formatReadingTime(updatedData?.remainingTime)
+        }
+      }, 250) // 250ms after user stops scrolling
+
+      window.addEventListener('scroll', handleScroll)
     } catch (e) {
       console.error('Error in content script:', e)
     }

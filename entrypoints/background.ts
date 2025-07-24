@@ -1,6 +1,6 @@
 export default defineBackground(() => {
   console.log('Background started', { id: browser.runtime.id })
-  browser.runtime.onMessage.addListener(async (message: RuntimeMessage, sender, sendResponse) => {
+  browser.runtime.onMessage.addListener(async (message: RuntimeMessage, sender) => {
     try {
       switch (message.action) {
         case RuntimeEvent.ON_READING_TIME_CHANGE:
