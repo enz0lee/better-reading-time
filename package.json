@@ -13,6 +13,7 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "prepare": "wxt prepare",
     "postinstall": "wxt prepare",
     "format": "prettier --write .",
     "lint": "eslint entrypoints --ext .ts,.tsx",
