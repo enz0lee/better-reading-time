@@ -52,10 +52,9 @@ function addFabButton(readingTime?: ReadingTimeData) {
   // Create the floating button
   const floatingBtn = document.createElement('div')
   floatingBtn.style.position = 'fixed'
-  floatingBtn.style.bottom = '24px'
-  floatingBtn.style.right = '24px'
+  floatingBtn.style.bottom = '48px'
+  floatingBtn.style.right = '48px'
   floatingBtn.style.zIndex = '9999'
-  floatingBtn.style.background = '#ffe100ff'
   floatingBtn.style.border = 'none'
 
   document.body.appendChild(floatingBtn)

@@ -1,6 +1,5 @@
-import { plugins } from './node_modules/@wxt-dev/browser/src/gen/index.d'
-import { defineConfig } from 'wxt'
 import tailwindcss from '@tailwindcss/vite'
+import { defineConfig } from 'wxt'
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
