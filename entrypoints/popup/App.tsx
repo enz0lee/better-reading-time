@@ -1,30 +1,55 @@
-import reactLogo from '@/assets/react.svg'
-import { useState } from 'react'
 import './App.css'
-import wxtLogo from '/wxt.svg'
+
+const KOFI_ID = 'T6T41ICUDW'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [readingSpeed, setReadingSpeed] = useState<number>()
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setReadingSpeed(value === '' ? undefined : Number(value))
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://wxt.dev" target="_blank" rel="noreferrer">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="p-6 bg-white flex flex-col">
+      {/* Reading Speed Input Row */}
+      <div className="flex items-center">
+        <label
+          htmlFor="reading-speed"
+          className="text-base font-medium  text-gray-700 whitespace-nowrap"
+        >
+          Reading Speed
+        </label>
+        <div className="flex items-center ml-4">
+          <input
+            id="reading-speed"
+            type="number"
+            value={readingSpeed}
+            onChange={handleInputChange}
+            placeholder="WPM"
+            className="w-16 px-1 py-0.5 border-2 placeholder:text-gray-400 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-300 transition-colors text-sm"
+          />
+        </div>
       </div>
-      <h1>WXT + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the WXT and React logos to learn more</p>
-    </>
+      <span className="text-sm text-gray-500 mt-2 text-left">
+        Not sure?{' '}
+        <a
+          href="https://readingsoft.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-amber-600 underline"
+        >
+          Test your reading speed
+        </a>
+      </span>
+
+      <hr className="border-t-2 border-gray-200 my-5" />
+
+      {/* Ko-fi button */}
+      <a href={`https://ko-fi.com/${KOFI_ID}`} target="_blank" rel="noreferrer">
+        <img src="https://storage.ko-fi.com/cdn/kofi2.png?v=6" alt="Buy Me a Coffee at ko-fi.com" />
+      </a>
+    </div>
   )
 }
 
