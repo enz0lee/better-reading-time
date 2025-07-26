@@ -3,11 +3,16 @@ import './App.css'
 const KOFI_ID = 'T6T41ICUDW'
 
 function App() {
-  const [readingSpeed, setReadingSpeed] = useState<number>()
+  const [readingSpeed, setReadingSpeed] = useState<number | undefined>(undefined)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setReadingSpeed(value === '' ? undefined : Number(value))
+    const num = Number(value)
+    if (value.trim() === '' || isNaN(num) || num <= 0) {
+      setReadingSpeed(undefined)
+    } else {
+      setReadingSpeed(num)
+    }
   }
 
   return (

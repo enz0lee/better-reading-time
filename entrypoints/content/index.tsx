@@ -39,21 +39,6 @@ export default defineContentScript({
           data: calculateReadingTime(),
         })
       })
-
-      // Debounced scroll handler
-      const handleScroll = debounce(() => {
-        const updatedData = calculateReadingTime()
-        browser.runtime.sendMessage({
-          action: RuntimeEvent.ON_READING_TIME_CHANGE,
-          data: calculateReadingTime(),
-        })
-        const fabBtn = document.querySelector('#readinger-fab-button') as HTMLButtonElement
-        if (fabBtn) {
-          fabBtn.textContent = formatReadingTime(updatedData?.remainingTime)
-        }
-      }, 250) // 250ms after user stops scrolling
-
-      window.addEventListener('scroll', handleScroll)
     } catch (e) {
       console.error('Error in content script:', e)
     }
