@@ -3,15 +3,20 @@ import React, { useEffect } from 'react'
 import './FabButton.css'
 
 type FabButtonProps = {
-  onClick?: () => void
+  readingSpeed: number
   readingTime: ReadingTimeData
 }
 
-const FabButton: React.FC<FabButtonProps> = ({ readingTime }) => {
+const FabButton: React.FC<FabButtonProps> = ({
+  readingSpeed: initialReadingSpeed,
+  readingTime,
+}) => {
+  const [readingSpeed, setReadingSpeed] = useState(initialReadingSpeed)
+
   useEffect(() => {
     // Debounced scroll handler
     const handleScroll = debounce(() => {
-      const updatedData = calculateReadingTime()
+      const updatedData = calculateReadingTime(readingSpeed)
       browser.runtime.sendMessage({
         action: RuntimeEvent.ON_READING_TIME_CHANGE,
         data: updatedData,
@@ -26,6 +31,17 @@ const FabButton: React.FC<FabButtonProps> = ({ readingTime }) => {
 
     return () => {
       window.removeEventListener('scroll', handleScroll)
+    }
+  }, [readingSpeed])
+
+  useEffect(() => {
+    const unwatch = storage.watch<number>(StorageKey.READING_SPEED, (newReadingSpeed) => {
+      if (newReadingSpeed) {
+        setReadingSpeed(newReadingSpeed)
+      }
+    })
+    return () => {
+      unwatch()
     }
   }, [])
 

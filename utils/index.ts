@@ -1,4 +1,4 @@
-const AVERAGE_READING_SPEED_PER_SECOND = 200 / 60
+export const DEFAULT_WPM = 200 // Default reading speed in words per minute
 export interface ReadingTimeData {
   totalTime: number
   remainingTime: number
@@ -6,6 +6,10 @@ export interface ReadingTimeData {
 
 export enum RuntimeEvent {
   ON_READING_TIME_CHANGE = 'onReadingTimeChange',
+}
+
+export enum StorageKey {
+  READING_SPEED = 'local:readingSpeed',
 }
 
 export interface RuntimeMessage {
@@ -40,12 +44,12 @@ function calculateWordCount(text: string): number {
  * Calculate total reading time and remaining reading time based on current scroll position
  * @returns Updated ReadingTimeData with accurate remainingTime
  */
-export function calculateReadingTime(): ReadingTimeData | undefined {
+export function calculateReadingTime(readingSpeed: number): ReadingTimeData | undefined {
   const article = document.body
   // Calculate total reainding time
   const totalText = article.innerText
   const totalWordCount = calculateWordCount(totalText)
-  const totalTime = Math.round(totalWordCount / AVERAGE_READING_SPEED_PER_SECOND)
+  const totalTime = Math.round(totalWordCount / (readingSpeed / 60))
 
   // if (skipCalculatingRemainingTime) {
   //   return { totalTime, remainingTime: totalTime }
@@ -54,7 +58,7 @@ export function calculateReadingTime(): ReadingTimeData | undefined {
   // Get remaining text from current position
   const remainingText = getRemainingTextFromPosition(article)
   const remainingWordCount = calculateWordCount(remainingText)
-  const remainingTime = Math.round(remainingWordCount / AVERAGE_READING_SPEED_PER_SECOND)
+  const remainingTime = Math.round(remainingWordCount / (readingSpeed / 60))
 
   return { totalTime, remainingTime: Math.min(remainingTime, totalTime) }
 }

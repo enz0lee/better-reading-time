@@ -15,6 +15,40 @@ function App() {
     }
   }
 
+  // Load reading speed from storage when the component mounts
+  useEffect(() => {
+    const loadReadingSpeed = async () => {
+      const storedReadingSpeed = await storage.getItem<number>(StorageKey.READING_SPEED, {
+        fallback: DEFAULT_WPM,
+      })
+      if (storedReadingSpeed) {
+        setReadingSpeed(storedReadingSpeed)
+      }
+    }
+    loadReadingSpeed()
+  }, [])
+
+  // Watch for changes in reading speed from storage
+  useEffect(() => {
+    const unwatch = storage.watch<number>(StorageKey.READING_SPEED, (newReadingSpeed) => {
+      if (newReadingSpeed) {
+        setReadingSpeed(newReadingSpeed)
+      }
+    })
+    return () => {
+      unwatch()
+    }
+  }, [])
+
+  // Save reading speed to local storage
+  useEffect(() => {
+    if (readingSpeed === undefined) return
+    const handler = setTimeout(() => {
+      storage.setItem<number>(StorageKey.READING_SPEED, readingSpeed)
+    }, 250)
+    return () => clearTimeout(handler)
+  }, [readingSpeed])
+
   return (
     <div className="p-6 bg-white flex flex-col">
       {/* Reading Speed Input Row */}

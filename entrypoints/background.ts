@@ -4,7 +4,6 @@ export default defineBackground(() => {
     try {
       switch (message.action) {
         case RuntimeEvent.ON_READING_TIME_CHANGE:
-          console.log('Reading time changed:', message.data)
           // Update the badge text with the total reading time.
           browser.action.setBadgeText({
             tabId: sender.tab?.id,

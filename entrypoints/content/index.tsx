@@ -7,8 +7,11 @@ export default defineContentScript({
     try {
       console.log('Content script started', { id: browser.runtime.id })
 
-      const readingTime = calculateReadingTime()
-      addFabButton(readingTime)
+      const readingSpeed = await storage.getItem<number>(StorageKey.READING_SPEED, {
+        fallback: DEFAULT_WPM,
+      })
+      const readingTime = calculateReadingTime(readingSpeed)
+      addFabButton(readingSpeed, readingTime)
 
       // Send a message to the background script to update the badge text.
       browser.runtime.sendMessage({
@@ -21,7 +24,7 @@ export default defineContentScript({
           // If a new article was added.
           for (const node of mutation.addedNodes) {
             if (node instanceof Element && node.tagName === 'ARTICLE') {
-              const readingTime = calculateReadingTime()
+              const readingTime = calculateReadingTime(readingSpeed)
               browser.runtime.sendMessage({
                 action: RuntimeEvent.ON_READING_TIME_CHANGE,
                 data: readingTime,
@@ -36,7 +39,7 @@ export default defineContentScript({
       window.addEventListener('load', () => {
         browser.runtime.sendMessage({
           action: RuntimeEvent.ON_READING_TIME_CHANGE,
-          data: calculateReadingTime(),
+          data: calculateReadingTime(readingSpeed),
         })
       })
     } catch (e) {
@@ -45,7 +48,7 @@ export default defineContentScript({
   },
 })
 
-function addFabButton(readingTime?: ReadingTimeData) {
+function addFabButton(readingSpeed: number, readingTime?: ReadingTimeData) {
   if (!readingTime) {
     return
   }
@@ -58,5 +61,7 @@ function addFabButton(readingTime?: ReadingTimeData) {
   floatingBtn.style.border = 'none'
 
   document.body.appendChild(floatingBtn)
-  createRoot(floatingBtn).render(<FabButton readingTime={readingTime} />)
+  createRoot(floatingBtn).render(
+    <FabButton readingSpeed={readingSpeed} readingTime={readingTime} />
+  )
 }
