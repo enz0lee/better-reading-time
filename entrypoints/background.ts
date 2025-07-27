@@ -10,6 +10,9 @@ export default defineBackground(() => {
             tabId: sender.tab?.id,
             text: formatReadingTime(message.data?.totalTime),
           })
+          browser.action.setBadgeBackgroundColor({
+            color: '#FF9800',
+          })
           break
         default:
           break
