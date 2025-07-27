@@ -40,7 +40,7 @@ function App() {
     }
   }, [])
 
-  // Save reading speed to local storage
+  // Update reading speed to local storage and badge
   useEffect(() => {
     if (readingSpeed === undefined) return
     const handler = setTimeout(() => {

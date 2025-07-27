@@ -9,22 +9,35 @@ type FabButtonProps = {
 
 const FabButton: React.FC<FabButtonProps> = ({
   readingSpeed: initialReadingSpeed,
-  readingTime,
+  readingTime: initialReadingTime,
 }) => {
-  const [readingSpeed, setReadingSpeed] = useState(initialReadingSpeed)
+  const [readingSpeed, setReadingSpeed] = useState<number>(initialReadingSpeed)
+  const [readingTime, setReadingTime] = useState<ReadingTimeData | undefined>(initialReadingTime)
+  const fabContent = React.useMemo(
+    () => formatReadingTime(readingTime?.remainingTime),
+    [readingTime]
+  )
 
+  // Update reading time based on reading speed
+  useEffect(() => {
+    const updatedReadingTime = calculateReadingTime(readingSpeed)
+    setReadingTime(updatedReadingTime)
+    browser.runtime.sendMessage({
+      action: RuntimeEvent.ON_READING_TIME_CHANGE,
+      data: updatedReadingTime,
+    })
+  }, [readingSpeed])
+
+  // Update reading time on scroll
   useEffect(() => {
     // Debounced scroll handler
     const handleScroll = debounce(() => {
-      const updatedData = calculateReadingTime(readingSpeed)
+      const updatedReadingTime = calculateReadingTime(readingSpeed)
       browser.runtime.sendMessage({
         action: RuntimeEvent.ON_READING_TIME_CHANGE,
-        data: updatedData,
+        data: updatedReadingTime,
       })
-      const fabBtn = document.querySelector('#brt-fab-button') as HTMLButtonElement
-      if (fabBtn) {
-        fabBtn.textContent = formatReadingTime(updatedData?.remainingTime)
-      }
+      setReadingTime(updatedReadingTime)
     }, 250)
 
     window.addEventListener('scroll', handleScroll)
@@ -34,6 +47,7 @@ const FabButton: React.FC<FabButtonProps> = ({
     }
   }, [readingSpeed])
 
+  // Watch for changes in reading speed from storage
   useEffect(() => {
     const unwatch = storage.watch<number>(StorageKey.READING_SPEED, (newReadingSpeed) => {
       if (newReadingSpeed) {
@@ -47,7 +61,7 @@ const FabButton: React.FC<FabButtonProps> = ({
 
   return (
     <div id="brt-fab-button">
-      <span>{formatReadingTime(readingTime.totalTime)}</span>
+      <span>{fabContent}</span>
     </div>
   )
 }
