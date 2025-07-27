@@ -86,7 +86,11 @@ function App() {
 
       {/* Ko-fi button */}
       <a href={`https://ko-fi.com/${KOFI_ID}`} target="_blank" rel="noreferrer">
-        <img src="https://storage.ko-fi.com/cdn/kofi6.png?v=6" alt="Buy Me a Coffee at ko-fi.com" />
+        <img
+          id="kofi-button"
+          src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
+          alt="Buy Me a Coffee at ko-fi.com"
+        />
       </a>
     </div>
   )
