@@ -32,7 +32,7 @@ function App() {
             value={readingSpeed}
             onChange={handleInputChange}
             placeholder="WPM"
-            className="w-16 px-1 py-0.5 border-2 placeholder:text-gray-400 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-300 transition-colors text-sm"
+            className="w-16 px-1 py-0.5 border-2 placeholder:text-gray-400 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400 transition-colors text-sm"
           />
         </div>
       </div>
@@ -52,7 +52,7 @@ function App() {
 
       {/* Ko-fi button */}
       <a href={`https://ko-fi.com/${KOFI_ID}`} target="_blank" rel="noreferrer">
-        <img src="https://storage.ko-fi.com/cdn/kofi2.png?v=6" alt="Buy Me a Coffee at ko-fi.com" />
+        <img src="https://storage.ko-fi.com/cdn/kofi6.png?v=6" alt="Buy Me a Coffee at ko-fi.com" />
       </a>
     </div>
   )
