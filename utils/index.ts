@@ -10,6 +10,12 @@ export enum RuntimeEvent {
 
 export enum StorageKey {
   READING_SPEED = 'local:readingSpeed',
+  FAB_VISIBILITY = 'local:fabVisibility',
+}
+
+export enum FabVisibility {
+  SHOW = 'show',
+  HIDE = 'hide',
 }
 
 export interface RuntimeMessage {

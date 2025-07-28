@@ -1,4 +1,4 @@
-import { ReadingTimeData } from '@/utils'
+import { DEFAULT_WPM, FabVisibility, ReadingTimeData, StorageKey } from '@/utils'
 import { createRoot } from 'react-dom/client'
 
 export default defineContentScript({
@@ -7,11 +7,16 @@ export default defineContentScript({
     try {
       console.log('Content script started', { id: browser.runtime.id })
 
-      const readingSpeed = await storage.getItem<number>(StorageKey.READING_SPEED, {
-        fallback: DEFAULT_WPM,
-      })
+      const [readingSpeed, fabVisibility] = await Promise.all([
+        storage.getItem<number>(StorageKey.READING_SPEED, {
+          fallback: DEFAULT_WPM,
+        }),
+        storage.getItem<FabVisibility>(StorageKey.FAB_VISIBILITY, {
+          fallback: FabVisibility.SHOW,
+        }),
+      ])
       const readingTime = calculateReadingTime(readingSpeed)
-      addFabButton(readingSpeed, readingTime)
+      addFabButton(fabVisibility, readingSpeed, readingTime)
 
       // Send a message to the background script to update the badge text.
       browser.runtime.sendMessage({
@@ -48,7 +53,11 @@ export default defineContentScript({
   },
 })
 
-function addFabButton(readingSpeed: number, readingTime?: ReadingTimeData) {
+function addFabButton(
+  fabVisibility: FabVisibility,
+  readingSpeed: number,
+  readingTime?: ReadingTimeData
+) {
   if (!readingTime) {
     return
   }
@@ -62,6 +71,10 @@ function addFabButton(readingSpeed: number, readingTime?: ReadingTimeData) {
 
   document.body.appendChild(floatingBtn)
   createRoot(floatingBtn).render(
-    <FabButton readingSpeed={readingSpeed} readingTime={readingTime} />
+    <FabButton
+      readingSpeed={readingSpeed}
+      readingTime={readingTime}
+      fabVisibility={fabVisibility}
+    />
   )
 }

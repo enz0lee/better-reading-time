@@ -1,9 +1,12 @@
+import { DEFAULT_WPM, FabVisibility, StorageKey } from '@/utils'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
 const KOFI_ID = 'T6T41ICUDW'
 
 function App() {
   const [readingSpeed, setReadingSpeed] = useState<number | undefined>(undefined)
+  const [fabVisibility, setFabVisibility] = useState<FabVisibility>(FabVisibility.SHOW)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -15,29 +18,25 @@ function App() {
     }
   }
 
-  // Load reading speed from storage when the component mounts
+  const handleToggleFab = () => {
+    setFabVisibility(fabVisibility === FabVisibility.SHOW ? FabVisibility.HIDE : FabVisibility.SHOW)
+  }
+
+  // Load reading speed and FabButton visibility from storage when the component mounts
   useEffect(() => {
-    const loadReadingSpeed = async () => {
+    const loadSettings = async () => {
       const storedReadingSpeed = await storage.getItem<number>(StorageKey.READING_SPEED, {
         fallback: DEFAULT_WPM,
       })
       if (storedReadingSpeed) {
         setReadingSpeed(storedReadingSpeed)
       }
+      const storedFabVisibility = await storage.getItem<FabVisibility>(StorageKey.FAB_VISIBILITY, {
+        fallback: FabVisibility.SHOW,
+      })
+      setFabVisibility(storedFabVisibility)
     }
-    loadReadingSpeed()
-  }, [])
-
-  // Watch for changes in reading speed from storage
-  useEffect(() => {
-    const unwatch = storage.watch<number>(StorageKey.READING_SPEED, (newReadingSpeed) => {
-      if (newReadingSpeed) {
-        setReadingSpeed(newReadingSpeed)
-      }
-    })
-    return () => {
-      unwatch()
-    }
+    loadSettings()
   }, [])
 
   // Update reading speed to local storage and badge
@@ -48,6 +47,14 @@ function App() {
     }, 250)
     return () => clearTimeout(handler)
   }, [readingSpeed])
+
+  // Update FabButton visibility in local storage
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      storage.setItem<FabVisibility>(StorageKey.FAB_VISIBILITY, fabVisibility)
+    }, 250)
+    return () => clearTimeout(handler)
+  }, [fabVisibility])
 
   return (
     <div className="p-6 bg-white flex flex-col">
@@ -69,6 +76,19 @@ function App() {
             className="w-16 px-1 py-0.5 border-2 placeholder:text-gray-400 border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-300 focus:border-amber-400 transition-colors text-sm"
           />
         </div>
+      </div>
+      {/* FabButton Toggle Row */}
+      <div className="flex items-center mt-4">
+        <label htmlFor="toggle-fab" className="text-base font-medium text-gray-700">
+          Show Floating Button
+        </label>
+        <input
+          id="toggle-fab"
+          type="checkbox"
+          checked={fabVisibility === FabVisibility.SHOW}
+          onChange={handleToggleFab}
+          className="ml-3 w-5 h-5 accent-amber-400"
+        />
       </div>
       <span className="text-sm text-gray-500 mt-2 text-left">
         Not sure?{' '}

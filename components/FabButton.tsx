@@ -1,18 +1,21 @@
-import { ReadingTimeData } from '@/utils'
+import { FabVisibility, ReadingTimeData, StorageKey } from '@/utils'
 import React, { useEffect } from 'react'
 import './FabButton.css'
 
 type FabButtonProps = {
   readingSpeed: number
   readingTime: ReadingTimeData
+  fabVisibility: FabVisibility
 }
 
 const FabButton: React.FC<FabButtonProps> = ({
   readingSpeed: initialReadingSpeed,
   readingTime: initialReadingTime,
+  fabVisibility: initialFabVisibility,
 }) => {
   const [readingSpeed, setReadingSpeed] = useState<number>(initialReadingSpeed)
   const [readingTime, setReadingTime] = useState<ReadingTimeData | undefined>(initialReadingTime)
+  const [fabVisibility, setFabVisibility] = React.useState<FabVisibility>(initialFabVisibility)
   const fabContent = React.useMemo(
     () => formatReadingTime(readingTime?.remainingTime),
     [readingTime]
@@ -47,17 +50,31 @@ const FabButton: React.FC<FabButtonProps> = ({
     }
   }, [readingSpeed])
 
-  // Watch for changes in reading speed from storage
+  // Watch for changes in reading speed and FabButton visibility from storage
   useEffect(() => {
-    const unwatch = storage.watch<number>(StorageKey.READING_SPEED, (newReadingSpeed) => {
-      if (newReadingSpeed) {
-        setReadingSpeed(newReadingSpeed)
+    const unwatchReadingSpeed = storage.watch<number>(
+      StorageKey.READING_SPEED,
+      (newReadingSpeed) => {
+        if (newReadingSpeed) {
+          setReadingSpeed(newReadingSpeed)
+        }
       }
-    })
+    )
+    const unwatchFabVisibility = storage.watch<FabVisibility>(
+      StorageKey.FAB_VISIBILITY,
+      (newVisibility) => {
+        if (newVisibility) {
+          setFabVisibility(newVisibility)
+        }
+      }
+    )
     return () => {
-      unwatch()
+      unwatchReadingSpeed()
+      unwatchFabVisibility()
     }
   }, [])
+
+  if (fabVisibility === FabVisibility.HIDE) return null
 
   return (
     <div id="brt-fab-button">
