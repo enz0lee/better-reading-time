@@ -77,6 +77,17 @@ function App() {
           />
         </div>
       </div>
+      <span className="text-sm text-gray-500 mt-2 text-left">
+        Not sure?{' '}
+        <a
+          href="https://readingsoft.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-amber-600 underline"
+        >
+          Test your reading speed
+        </a>
+      </span>
       {/* FabButton Toggle Row */}
       <div className="flex items-center mt-4">
         <label htmlFor="toggle-fab" className="text-base font-medium text-gray-700">
@@ -90,17 +101,6 @@ function App() {
           className="ml-3 w-5 h-5 accent-amber-400"
         />
       </div>
-      <span className="text-sm text-gray-500 mt-2 text-left">
-        Not sure?{' '}
-        <a
-          href="https://readingsoft.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-amber-600 underline"
-        >
-          Test your reading speed
-        </a>
-      </span>
 
       <hr className="border-t-2 border-gray-200 my-5" />
 
