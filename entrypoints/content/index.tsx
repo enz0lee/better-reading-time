@@ -12,7 +12,7 @@ export default defineContentScript({
           fallback: DEFAULT_WPM,
         }),
         storage.getItem<FabVisibility>(StorageKey.FAB_VISIBILITY, {
-          fallback: FabVisibility.SHOW,
+          fallback: FabVisibility.REMAINING,
         }),
       ])
       const readingTime = calculateReadingTime(readingSpeed)

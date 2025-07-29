@@ -1,5 +1,5 @@
 {
-  "name": "wxt-react-starter",
+  "name": "better-reading-time",
   "description": "Estimate the total reading time and track remaining reading time dynamically based on your scroll position.",
   "private": true,
   "version": "1.0.0",

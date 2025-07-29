@@ -14,7 +14,7 @@ export enum StorageKey {
 }
 
 export enum FabVisibility {
-  SHOW = 'show',
+  REMAINING = 'remaining',
   HIDE = 'hide',
 }
 

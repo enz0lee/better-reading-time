@@ -6,7 +6,7 @@ const KOFI_ID = 'T6T41ICUDW'
 
 function App() {
   const [readingSpeed, setReadingSpeed] = useState<number | undefined>(undefined)
-  const [fabVisibility, setFabVisibility] = useState<FabVisibility>(FabVisibility.SHOW)
+  const [fabVisibility, setFabVisibility] = useState<FabVisibility>(FabVisibility.REMAINING)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -19,7 +19,9 @@ function App() {
   }
 
   const handleToggleFab = () => {
-    setFabVisibility(fabVisibility === FabVisibility.SHOW ? FabVisibility.HIDE : FabVisibility.SHOW)
+    setFabVisibility(
+      fabVisibility === FabVisibility.REMAINING ? FabVisibility.HIDE : FabVisibility.REMAINING
+    )
   }
 
   // Load reading speed and FabButton visibility from storage when the component mounts
@@ -32,7 +34,7 @@ function App() {
         setReadingSpeed(storedReadingSpeed)
       }
       const storedFabVisibility = await storage.getItem<FabVisibility>(StorageKey.FAB_VISIBILITY, {
-        fallback: FabVisibility.SHOW,
+        fallback: FabVisibility.REMAINING,
       })
       setFabVisibility(storedFabVisibility)
     }
@@ -96,7 +98,7 @@ function App() {
         <input
           id="toggle-fab"
           type="checkbox"
-          checked={fabVisibility === FabVisibility.SHOW}
+          checked={fabVisibility === FabVisibility.REMAINING}
           onChange={handleToggleFab}
           className="ml-3 w-5 h-5 accent-amber-400"
         />
