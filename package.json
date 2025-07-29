@@ -1,8 +1,8 @@
 {
   "name": "wxt-react-starter",
-  "description": "manifest.json description",
+  "description": "Estimate the total reading time and track remaining reading time dynamically based on your scroll position.",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",
