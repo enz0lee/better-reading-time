@@ -2,8 +2,6 @@ import { DEFAULT_WPM, FabVisibility, StorageKey } from '@/utils'
 import React, { useEffect, useState } from 'react'
 import './App.css'
 
-const KOFI_ID = 'T6T41ICUDW'
-
 function App() {
   const [readingSpeed, setReadingSpeed] = useState<number | undefined>(undefined)
   const [fabVisibility, setFabVisibility] = useState<FabVisibility>(FabVisibility.REMAINING)
@@ -66,7 +64,15 @@ function App() {
           htmlFor="reading-speed"
           className="text-base font-medium  text-gray-700 whitespace-nowrap"
         >
-          Reading Speed
+          Reading Speed{' '}
+          <a
+            href="https://en.wikipedia.org/wiki/Words_per_minute"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-600 underline"
+          >
+            (WPM)
+          </a>
         </label>
         <div className="flex items-center ml-4">
           <input
@@ -79,41 +85,19 @@ function App() {
           />
         </div>
       </div>
-      <span className="text-sm text-gray-500 mt-2 text-left">
-        Not sure?{' '}
-        <a
-          href="https://readingsoft.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-amber-600 underline"
-        >
-          Test your reading speed
-        </a>
-      </span>
       {/* FabButton Toggle Row */}
       <div className="flex items-center mt-4">
         <label htmlFor="toggle-fab" className="text-base font-medium text-gray-700">
-          Show Floating Button
+          Show Floating Badge
         </label>
         <input
           id="toggle-fab"
           type="checkbox"
           checked={fabVisibility === FabVisibility.REMAINING}
           onChange={handleToggleFab}
-          className="ml-3 w-5 h-5 accent-amber-400"
+          className="ml-3 w-5 h-5 accent-amber-600"
         />
       </div>
-
-      <hr className="border-t-2 border-gray-200 my-5" />
-
-      {/* Ko-fi button */}
-      <a href={`https://ko-fi.com/${KOFI_ID}`} target="_blank" rel="noreferrer">
-        <img
-          id="kofi-button"
-          src="https://storage.ko-fi.com/cdn/kofi6.png?v=6"
-          alt="Buy Me a Coffee at ko-fi.com"
-        />
-      </a>
     </div>
   )
 }
