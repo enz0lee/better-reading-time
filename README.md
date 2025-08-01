@@ -76,7 +76,7 @@ The default reading speed is 200 WPM. You can adjust this based on your reading 
 
 ```
 better-reading-time/
-├── components/          # React components
+├── components/         # React components
 ├── entrypoints/        # Extension entry points
 │   ├── background.ts   # Background script
 │   ├── content/        # Content script
@@ -113,6 +113,14 @@ We welcome contributions! Please feel free to submit a Pull Request. For major c
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Support
+
+If you find this extension helpful, consider supporting the development:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/enzolee)
+
+Your support helps keep this project maintained and improved! ☕
 
 ## License
 
